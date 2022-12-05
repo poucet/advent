@@ -1,16 +1,4 @@
-import * as fs from 'fs';
-
-function readFile(path: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf8', (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    })
-  })
-}
+import {readFile} from '../lib/file';
 
 function parse(data: string): Array<Array<number>> {
   const result: Array<Array<number>> = [[]];
@@ -27,7 +15,7 @@ function parse(data: string): Array<Array<number>> {
 function sum(numbers: Array<number>): number {
   if (numbers.length === 0) return 0;
   if (numbers.length === 1) return numbers[0];
-  return numbers.reduce((p, c) => p + c)
+  return numbers.reduce((p, c) => p + c);
 }
 
 function maxL(numbers: Array<number>) {
@@ -43,4 +31,4 @@ async function main() {
   console.log(sum(data.slice(data.length - 3)));
 }
 
-main()
+main();

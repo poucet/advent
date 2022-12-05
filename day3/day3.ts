@@ -1,16 +1,4 @@
-import * as fs from 'fs';
-
-function readFile(path: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf8', (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    });
-  });
-}
+import {readFile} from '../lib/file';
 
 function score(char: string) {
   const s = char.charCodeAt(0);
