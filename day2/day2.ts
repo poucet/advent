@@ -1,4 +1,5 @@
 import {readFile} from '../lib/file';
+import {sum} from '../lib/util';
 
 enum RPS {
   ROCK = 1,
@@ -24,11 +25,6 @@ const WIN = new Map<RPS, RPS>([
   [RPS.PAPER, RPS.SCISSORS],
 ]);
 
-function sum(numbers: Array<number>): number {
-  if (numbers.length === 0) return 0;
-  if (numbers.length === 1) return numbers[0];
-  return numbers.reduce((p, c) => p + c);
-}
 
 function makeChoices(
   rock: string,
