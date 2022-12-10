@@ -4,14 +4,19 @@ class CPU {
   private x = 1;
   private t = 1;
   constructor(
-    private readonly callback: (tick: number, value: number) => void
+    private readonly pre:
+      | ((tick: number, value: number) => void)
+      | undefined = undefined,
+    private readonly post:
+      | ((tick: number, value: number) => void)
+      | undefined = undefined
   ) {}
 
   execute(instruction: string) {
     if (instruction === 'noop') {
       this.noop();
     } else if (instruction.startsWith('addx ')) {
-      const [_cmd, num] = instruction.split(' ');
+      const [_, num] = instruction.split(' ');
       this.addx(Number(num));
     } else {
       throw new Error(`Unknown instruction: ${instruction}`);
@@ -19,25 +24,32 @@ class CPU {
   }
 
   noop() {
-    this.tick();
+    this.pretick();
+    this.posttick();
   }
 
   addx(n: number) {
-    this.tick();
+    this.pretick();
+    this.posttick();
+    this.pretick();
     this.x += n;
-    this.tick();
+    this.posttick();
   }
 
-  tick() {
+  posttick() {
     this.t += 1;
-    this.callback(this.t, this.x);
+    if (this.post) this.post(this.t, this.x);
+  }
+
+  pretick() {
+    if (this.pre) this.pre(this.t, this.x);
   }
 }
 
 async function main() {
   const input = await readFile('day10/input.txt');
   let s = 0;
-  const cpu = new CPU((t, v) => {
+  const cpu = new CPU(undefined, (t, v) => {
     if ((t - 20) % 40 === 0 && t <= 220) {
       s += t * v;
     }
@@ -51,7 +63,7 @@ async function main() {
 
 async function main2() {
   const input = await readFile('day10/input.txt');
-  let line: Array<string> = ['#'];
+  let line: Array<string> = [];
   const cpu = new CPU((t, v) => {
     if (Math.abs(v - ((t - 1) % 40)) <= 1) {
       line.push('#');
@@ -69,4 +81,5 @@ async function main2() {
   }
 }
 
+main();
 main2();
