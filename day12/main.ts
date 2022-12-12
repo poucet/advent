@@ -49,7 +49,11 @@ class Maze {
     public readonly matrix: AdjancencyMatrix<Id>
   ) {}
 
+<<<<<<< HEAD
   static parse(input: string, isStart: (char: string) => boolean) {
+=======
+  static parse(input: string) {
+>>>>>>> 3dd3f8b0910e4842208208577630c2e4c2119f64
     const lines = input.split('\n');
     const startIds: Array<Id> = [];
     let endId: Id | undefined = undefined;
