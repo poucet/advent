@@ -103,7 +103,7 @@ function parseInput(input: string, pwd: Directory) {
 }
 
 async function main() {
-  const input = await readFile('day7/input.txt');
+  const input = await readFile('day7/input2.txt');
   const root = new Directory('', null);
   parseInput(input, root);
   const leftSpace = 70000000 - root.size;
@@ -116,7 +116,6 @@ async function main() {
       s += dir.size;
     }
     if (dir.size > neededSpace) {
-
       m = Math.min(dir.size, m);
     }
   }

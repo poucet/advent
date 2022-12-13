@@ -76,7 +76,7 @@ function visible(
 }
 
 function view(numbers: Array<number>, pos: number): number {
-  let height = numbers[pos];
+  const height = numbers[pos];
   let s = 0;
   for (let i = pos + 1; i < numbers.length; ++i) {
     s += 1;
@@ -91,14 +91,14 @@ function scenicScore(matrix: Matrix, x: number, y: number) {
   row.reverse();
   const visL = view(row, row.length - 1 - y);
   const column = matrix.column(y);
-  let visD = view(column, x);
+  const visD = view(column, x);
   column.reverse();
-  let visU = view(column, column.length - 1 - x);
+  const visU = view(column, column.length - 1 - x);
   return visR * visL * visD * visU;
 }
 
-async function main() {
-  const data = await readFile('day8/input.txt');
+async function main1() {
+  const data = await readFile('day8/input2.txt');
   const matrix = Matrix.parseFrom(data);
   const isVisible = new Set();
   visible(matrix, (r: number, c: number, _v: number) => {
@@ -108,7 +108,7 @@ async function main() {
 }
 
 async function main2() {
-  const data = await readFile('day8/input.txt');
+  const data = await readFile('day8/input2.txt');
   const matrix = Matrix.parseFrom(data);
   const isVisible = new Set();
   let maxScore = -1;
@@ -120,4 +120,5 @@ async function main2() {
   console.log(maxScore);
 }
 
+main1();
 main2();

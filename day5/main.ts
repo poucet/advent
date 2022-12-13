@@ -44,7 +44,7 @@ class Ship {
       ship.stacks.push(new Stack());
     }
     for (let l = input.length - 2; l >= 0; --l) {
-      const row = [...input[l].matchAll(/(\[[A-Z][\]]|   )(?: |$)/g)];
+      const row = [...input[l].matchAll(/(\[[A-Z][\]]| {3})(?: |$)/g)];
       for (let i = 0; i < numShips; ++i) {
         const col = row[i][1];
         if (isEmpty(col.trim())) continue;
@@ -92,8 +92,8 @@ class Instruction {
   }
 }
 
-async function main() {
-  const fileData = await readFile('day5/input.txt');
+async function main1() {
+  const fileData = await readFile('day5/input2.txt');
   const lines = fileData.split('\n');
   const splitIndex = lines.findIndex(isEmpty);
   const ship = Ship.parseFrom(lines.slice(0, splitIndex));
@@ -102,12 +102,29 @@ async function main() {
     .filter(not(isEmpty))
     .map(Instruction.parseFrom);
   for (const i of instructions) {
-    console.log(ship.toString());
-    console.log(i.toString());
-    i.apply2(ship);
-    console.log('---');
+    i.apply(ship);
   }
   console.log(ship.toString());
 }
 
+async function main2() {
+  const fileData = await readFile('day5/input2.txt');
+  const lines = fileData.split('\n');
+  const splitIndex = lines.findIndex(isEmpty);
+  const ship = Ship.parseFrom(lines.slice(0, splitIndex));
+  const instructions = lines
+    .slice(splitIndex + 1)
+    .filter(not(isEmpty))
+    .map(Instruction.parseFrom);
+  for (const i of instructions) {
+    i.apply2(ship);
+  }
+  console.log(ship.toString());
+}
+
+async function main() {
+  await main1();
+  console.log('----');
+  await main2();
+}
 main();

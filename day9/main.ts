@@ -102,10 +102,18 @@ function execute(input: Array<string>, numKnots: number) {
   return tails[tails.length - 1].positions;
 }
 
-async function main() {
-  const data = await readFile('day9/input.txt');
-  const pos = execute(data.split('\n'), 498);
+async function main1() {
+  const data = await readFile('day9/input2.txt');
+  const pos = execute(data.split('\n'), 1);
   console.log(new Set(pos.map(p => p.toString())).size);
 }
 
-main();
+main1();
+
+async function main2() {
+  const data = await readFile('day9/input2.txt');
+  const pos = execute(data.split('\n'), 9);
+  console.log(new Set(pos.map(p => p.toString())).size);
+}
+
+main2();

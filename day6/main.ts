@@ -5,7 +5,7 @@ function isAllDiff(input: string): boolean {
 }
 
 async function main1() {
-  const data = await readFile('day6/input.txt');
+  const data = await readFile('day6/input2.txt');
   console.log(data);
   for (let i = 0; i < data.length - 3; ++i) {
     if (isAllDiff(data.slice(i, i + 4))) {
@@ -15,15 +15,15 @@ async function main1() {
   }
 }
 
-
 async function main2() {
-  const data = await readFile('day6/input.txt');
+  const data = await readFile('day6/input2.txt');
   for (let i = 0; i < data.length - 13; ++i) {
     if (isAllDiff(data.slice(i, i + 14))) {
-      console.log(i +14);
+      console.log(i + 14);
       break;
     }
   }
 }
 
+main1();
 main2();

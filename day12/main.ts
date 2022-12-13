@@ -119,14 +119,14 @@ function bfs(maze: Maze): number {
 }
 
 async function main1() {
-  const input = await readFile('day12/input.txt');
+  const input = await readFile('day12/input2.txt');
   const maze = Maze.parse(input, x => x === 'S');
 
   console.log(bfs(maze));
 }
 
 async function main2() {
-  const input = await readFile('day12/input.txt');
+  const input = await readFile('day12/input2.txt');
   const maze = Maze.parse(input, x => x === 'S' || x === 'a');
 
   console.log(bfs(maze));

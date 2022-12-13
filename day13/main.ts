@@ -1,7 +1,6 @@
 import {readFile} from '../lib/file';
 
 function parse(input: Array<string>) {
-  console.log(input);
   return [eval(input[0]), eval(input[1])];
 }
 
@@ -30,7 +29,7 @@ function compare(left: any, right: any): 1 | 0 | -1 {
 }
 
 async function main1() {
-  const input = await readFile('day13/sample.txt');
+  const input = await readFile('day13/input2.txt');
   const lines = input.split('\n');
 
   let i = 1;
@@ -45,10 +44,10 @@ async function main1() {
   console.log(sum);
 }
 
-// main1();
+main1();
 
 async function main2() {
-  const input = await readFile('day13/input.txt');
+  const input = await readFile('day13/input2.txt');
   const lines = input.split('\n');
 
   const all = [];

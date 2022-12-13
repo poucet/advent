@@ -39,7 +39,7 @@ function parse(line: string): Pair<Interval> {
 }
 
 async function main() {
-  const fileData = await readFile('day4/input.txt');
+  const fileData = await readFile('day4/input2.txt');
   const data = fileData.split('\n').filter(not(isEmpty)).map(parse);
   const containing = data.filter(x => x.a.contains(x.b) || x.b.contains(x.a));
   const overlapping = data.filter(x => x.a.overlaps(x.b));

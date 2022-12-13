@@ -46,8 +46,8 @@ class CPU {
   }
 }
 
-async function main() {
-  const input = await readFile('day10/input.txt');
+async function main1() {
+  const input = await readFile('day10/input2.txt');
   let s = 0;
   const cpu = new CPU(undefined, (t, v) => {
     if ((t - 20) % 40 === 0 && t <= 220) {
@@ -62,7 +62,7 @@ async function main() {
 }
 
 async function main2() {
-  const input = await readFile('day10/input.txt');
+  const input = await readFile('day10/input2.txt');
   let line: Array<string> = [];
   const cpu = new CPU((t, v) => {
     if (Math.abs(v - ((t - 1) % 40)) <= 1) {
@@ -81,5 +81,5 @@ async function main2() {
   }
 }
 
-main();
+main1();
 main2();

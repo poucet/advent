@@ -7,6 +7,12 @@ enum RPS {
   SCISSORS = 3,
 }
 
+const SELF = new Map<string, RPS>([
+  ['X', RPS.ROCK],
+  ['Y', RPS.PAPER],
+  ['Z', RPS.SCISSORS],
+]);
+
 const OPPONENT = new Map<string, RPS>([
   ['A', RPS.ROCK],
   ['B', RPS.PAPER],
@@ -25,7 +31,6 @@ const WIN = new Map<RPS, RPS>([
   [RPS.PAPER, RPS.SCISSORS],
 ]);
 
-
 function makeChoices(
   rock: string,
   paper: string,
@@ -40,9 +45,20 @@ function makeChoices(
 
 function score(hand: string) {
   if (!hand) return 0;
-  let [o, s] = hand.split(' ');
+  const [o, s] = hand.split(' ');
   const oppchoice = OPPONENT.get(o);
-  if (!oppchoice) return 0;
+  const selfChoice = SELF.get(s);
+  if (!oppchoice || !selfChoice) throw new Error(`Unknown choices: ${o}, ${s}`);
+  if (LOSE.get(oppchoice) === selfChoice) return 0 + selfChoice;
+  if (WIN.get(oppchoice) === selfChoice) return 6 + selfChoice;
+  return 3 + selfChoice;
+}
+
+function pick(hand: string) {
+  if (!hand) return 0;
+  const [o, s] = hand.split(' ');
+  const oppchoice = OPPONENT.get(o);
+  if (!oppchoice) throw new Error(`Unknown choices: ${o}`);
   switch (s) {
     case 'X': {
       return 0 + (LOSE.get(oppchoice) ?? 0);
@@ -57,11 +73,18 @@ function score(hand: string) {
   }
 }
 
-async function main() {
-  const input = await readFile('day2/input.txt');
-  const self = makeChoices('X', 'Y', 'Z');
+async function main1() {
+  const input = await readFile('day2/input2.txt');
   const scores = input.split('\n').map(l => score(l));
   console.log(sum(scores));
 }
 
-main();
+async function main2() {
+  const input = await readFile('day2/input2.txt');
+  const self = makeChoices('X', 'Y', 'Z');
+  const scores = input.split('\n').map(l => pick(l));
+  console.log(sum(scores));
+}
+
+main1();
+main2();

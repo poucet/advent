@@ -37,11 +37,20 @@ function groupBy3(input: Array<string>): Array<Array<string>> {
   return result;
 }
 
-async function main() {
-  const input = await readFile('day3/input.txt');
+async function main1() {
+  const input = await readFile('day3/input2.txt');
+  const lines = input.split('\n');
+  const pairs = lines.map(splitInHalf);
+  console.log(sum(pairs.map(([x, y]) => score(common(x, y)))));
+}
+
+main1();
+
+async function main2() {
+  const input = await readFile('day3/input2.txt');
   const lines = input.split('\n');
   const chars = groupBy3(lines).map(arr => arr.reduce(common));
   console.log(sum(chars.map(score)));
 }
 
-main();
+main2();

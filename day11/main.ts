@@ -159,8 +159,8 @@ class Monkey {
     console.log(this.items);
   }
 }
-async function main() {
-  const data = await readFile('day11/input.txt');
+async function main1() {
+  const data = await readFile('day11/input2.txt');
   const lines = data.split('\n');
   const monkeys = [];
   while (lines.length > 0) {
@@ -177,11 +177,11 @@ async function main() {
   }
   const ticks = monkeys.map(m => m.ticks);
   ticks.sort((a: number, b: number) => a - b);
-  console.log(ticks);
+  console.log(ticks[ticks.length - 1] * ticks[ticks.length - 2]);
 }
 
 async function main2() {
-  const data = await readFile('day11/input.txt');
+  const data = await readFile('day11/input2.txt');
   const lines = data.split('\n');
   const monkeys = [];
   while (lines.length > 0) {
@@ -195,13 +195,13 @@ async function main2() {
     .reduce((a: number, b: number) => a * b);
   for (let i = 0; i < 10000; i++) {
     for (const monkey of monkeys) {
-      monkey.do(monkeys, v => v ^ lcm);
+      monkey.do(monkeys, v => v % lcm);
     }
   }
   const ticks = monkeys.map(m => m.ticks);
   ticks.sort((a: number, b: number) => a - b);
-  console.log(ticks);
+  console.log(ticks[ticks.length - 1] * ticks[ticks.length - 2]);
 }
 
-main();
+main1();
 main2();
