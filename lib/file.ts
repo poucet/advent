@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import {Readable} from 'stream';
 
 export function readFile(path: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -12,3 +13,12 @@ export function readFile(path: string): Promise<string> {
   });
 }
 
+export function writeStream(path: string, stream: Readable): Promise<void> {
+  const out = fs.createWriteStream(path);
+  return new Promise((resolve: () => void) => {
+    stream.on('data', chunk => {
+      out.write(chunk);
+    });
+    stream.on('end', resolve);
+  });
+}

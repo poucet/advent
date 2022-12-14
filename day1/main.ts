@@ -1,5 +1,5 @@
 import {readFile} from '../lib/file';
-import {sum} from '../lib/util';
+import {maxL, sum} from '../lib/util';
 
 function parse(data: string): Array<Array<number>> {
   const result: Array<Array<number>> = [[]];
@@ -11,12 +11,6 @@ function parse(data: string): Array<Array<number>> {
     }
   }
   return result;
-}
-
-function maxL(numbers: Array<number>) {
-  if (numbers.length === 0) return 0;
-  if (numbers.length === 1) return numbers[0];
-  return numbers.reduce((p, c) => Math.max(p, c));
 }
 
 async function main1() {
