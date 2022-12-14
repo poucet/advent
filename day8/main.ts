@@ -10,7 +10,7 @@ class Matrix {
   }
 
   get numColumns() {
-    if (this.numRows == 0) return 0;
+    if (this.numRows === 0) return 0;
     return this.data[0].length;
   }
 

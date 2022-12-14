@@ -28,7 +28,7 @@ function sum(numbers: Array<number>): number {
 function groupBy3(input: Array<string>): Array<Array<string>> {
   const result: Array<Array<string>> = [];
   for (let i = 0; i < input.length; ++i) {
-    if (i % 3 == 0) {
+    if (i % 3 === 0) {
       result.push([input[i]]);
     } else {
       result[result.length - 1].push(input[i]);

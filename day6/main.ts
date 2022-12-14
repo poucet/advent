@@ -1,7 +1,7 @@
 import {readFile} from '../lib/file';
 
 function isAllDiff(input: string): boolean {
-  return input.length == new Set(input.split('')).size;
+  return input.length === new Set(input.split('')).size;
 }
 
 async function main1() {

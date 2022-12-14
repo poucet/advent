@@ -63,13 +63,13 @@ class Tail extends Knot {
     } else if ((dx <= -1 && dy < -1) || (dy <= -1 && dx < -1)) {
       this.move('L');
       this.move('D');
-    } else if (dx < -1 && dy == 0) {
+    } else if (dx < -1 && dy === 0) {
       this.move('L');
-    } else if (dx > 1 && dy == 0) {
+    } else if (dx > 1 && dy === 0) {
       this.move('R');
-    } else if (dy > 1 && dx == 0) {
+    } else if (dy > 1 && dx === 0) {
       this.move('U');
-    } else if (dy < -1 && dx == 0) {
+    } else if (dy < -1 && dx === 0) {
       this.move('D');
     } else {
       throw new Error(`Impossible combination ${dx} ${dy}`);

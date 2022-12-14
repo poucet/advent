@@ -31,9 +31,9 @@ class Directory implements Entry, Iterable<Directory> {
   }
 
   cd(input: string): Directory | null {
-    if (input == '..') return this.parent;
+    if (input === '..') return this.parent;
     const entry = this.contents.get(input);
-    if (!entry || entry.entryType != EntryType.Directory) return null;
+    if (!entry || entry.entryType !== EntryType.Directory) return null;
     return entry as Directory;
   }
 
@@ -52,7 +52,7 @@ class Directory implements Entry, Iterable<Directory> {
   public *[Symbol.iterator](): Iterator<Directory> {
     yield this;
     for (const e of this.contents.values()) {
-      if (e.entryType == EntryType.Directory) {
+      if (e.entryType === EntryType.Directory) {
         for (const d of e as Directory) {
           yield d;
         }
@@ -64,7 +64,7 @@ class Directory implements Entry, Iterable<Directory> {
 function parseEntry(pwd: Directory, input: string) {
   const parts = input.split(' ');
   let entry: Entry;
-  if (parts[0] == 'dir') {
+  if (parts[0] === 'dir') {
     entry = new Directory(parts[1], pwd);
   } else {
     entry = new File(parts[1], Number(parts[0]));
@@ -82,7 +82,7 @@ function parseInput(input: string, pwd: Directory) {
       if (cmd === 'ls') continue;
       if (cmd.startsWith('cd')) {
         const dir = cmd.slice(3);
-        if (dir == '/') {
+        if (dir === '/') {
           pwd = root;
         } else {
           const t = pwd.cd(dir);

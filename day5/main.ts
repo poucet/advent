@@ -38,7 +38,7 @@ class Ship {
       .split(' ')
       .filter(not(isEmpty));
     const numShips = stackIndices.length;
-    console.assert(numShips == Number(stackIndices[stackIndices.length - 1]));
+    console.assert(numShips === Number(stackIndices[stackIndices.length - 1]));
     const ship = new Ship();
     for (const _idx of stackIndices) {
       ship.stacks.push(new Stack());
