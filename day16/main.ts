@@ -67,6 +67,7 @@ function solve1(valves: Map<string, Valve>, maxMinutes: number): number {
 }
 
 function solve2(valves: Map<string, Valve>, maxMinutes: number): number {
+  return 0;
 }
 
 async function main1(path: string) {
