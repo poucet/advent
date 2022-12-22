@@ -1,6 +1,6 @@
-out/
-node_modules/
-package-lock.json
+2022/out/
+2022/node_modules/
+2022/package-lock.json
 **/*.hi
 **/*.o
 **/Main
