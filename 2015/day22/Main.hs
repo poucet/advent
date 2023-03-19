@@ -30,6 +30,7 @@ data Timers = Timers {
 } deriving (Eq, Ord, Show)
 
 data GameState = GameState {
+  difficulty :: Integer,
   mana :: Integer,
   playerHp :: Integer,
   bossHp :: Integer,
@@ -46,7 +47,7 @@ doAction f s
 chooseSpell :: GameState -> [Spell]
 chooseSpell s = filter (\spell -> cost spell <= mana s) 
   $   [ Shield | shield (timers s) == 0] 
-  ++  [ Drain  | poison (timers s) == 0]
+  ++  [ Poison  | poison (timers s) == 0]
   ++  [ Recharge | recharge (timers s) == 0]
   ++  [ MagicMissile, Drain]
 
@@ -59,7 +60,7 @@ castSpell spell s = s {
       recharge = if spell == Recharge then 5 else recharge t
     },
     playerHp = playerHp s + heal spell,
-    bossHp   = playerHp s - damage spell
+    bossHp   = bossHp s - damage spell
   }
   where t = timers s
 
@@ -82,9 +83,13 @@ tickTimers s = s {
     }
   }
 
+applyDifficulty :: GameState -> GameState
+applyDifficulty s = s { playerHp = playerHp s - difficulty s}
+
 battleRound :: GameState -> [AStep GameState Integer]
 battleRound s = do 
-  s1 <- doAction tickTimers s
+  s0 <- doAction applyDifficulty s
+  s1 <- doAction tickTimers s0
   spell <- chooseSpell s1
   s2 <- doAction (castSpell spell) s1
   s3 <- doAction tickTimers s2
@@ -106,14 +111,15 @@ parseBoss = do
 
 fromRight (Right x) = x
 
-battle :: GameState -> [Integer]
-battle s = take 10 $ [ cost | (s', cost) <- aStarOn id battleRound [s], bossHp s' <= 0]
+battle :: GameState -> Integer
+battle s = head [ cost  | (s', cost) <- aStarOn id battleRound [s], bossHp s' <= 0]
 
 main = do
   [filename] <- getArgs
   contents <- readFile filename
   let boss = fromRight $ parse parseBoss contents
   let game = GameState {
+    difficulty = 0,
     mana = 500,
     playerHp = 50,
     bossHp = fst boss,
@@ -121,3 +127,4 @@ main = do
     timers = Timers 0 0 0
   }
   print $ battle game
+  print $ battle (game { difficulty = 1})
