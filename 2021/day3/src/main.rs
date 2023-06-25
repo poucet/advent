@@ -39,7 +39,6 @@ impl Index<usize> for  Binary {
     }
 }
 
-
 fn main() {
     let binary: Vec<Binary> = read_input();
     process(binary.iter().collect());
@@ -61,12 +60,12 @@ fn process(binary: Vec<&Binary>) {
 
 
 fn process2(binary: Vec<&Binary>) {
-    let oxygen = find_maximum(&binary, 0).unwrap();
-    let carbon = find_minimum(&binary, 0).unwrap();
+    let oxygen = find(&binary, 0, |b, msb| b == msb).unwrap();
+    let carbon = find(&binary, 0, |b, msb| b != msb).unwrap();
     println!("Life support: {}", dbg!(oxygen.0.load::<usize>()) * dbg!(carbon.0.load::<usize>()))
 }
 
-fn find_maximum<'a>(binary: &Vec<&'a Binary>, i: usize) -> Option<&'a Binary> {
+fn find<'a>(binary: &Vec<&'a Binary>, i: usize, matcher: fn(bool, bool) -> bool) -> Option<&'a Binary> {
     if binary.is_empty() {
         return None;
     } else if binary.len() == 1 {
@@ -77,21 +76,7 @@ fn find_maximum<'a>(binary: &Vec<&'a Binary>, i: usize) -> Option<&'a Binary> {
     }
 
     let msb = extract(&binary, i);
-    find_maximum(&binary.iter().filter(|b| b[i] == msb).map(|x| *x).collect(), i + 1)
-}
-
-fn find_minimum<'a>(binary: &Vec<&'a Binary>, i: usize) -> Option<&'a Binary> {
-    if binary.is_empty() {
-        return None;
-    } else if binary.len() == 1 {
-        return Some(&binary[0]);
-    } else if i >= binary[0].len() {
-        // We could not find an unambiguous solution and we're at the end of the bits.
-        return None;
-    }
-
-    let msb = extract(&binary, i);
-    find_minimum(&binary.iter().filter(|b| b[i] != msb).map(|x| *x).collect(), i + 1)
+    find(&binary.iter().filter(|b| matcher(b[i], msb)).map(|x| *x).collect(), i + 1, matcher)
 }
 
 fn extract(binary: &[&Binary], index: usize) -> bool {
