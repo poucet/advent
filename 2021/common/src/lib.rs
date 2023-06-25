@@ -4,6 +4,11 @@ use std::fs;
 use std::env;
 use std::process;
 
+
+
+#[derive(Debug)]
+pub struct ParseError;
+
 pub fn parse_lines<T>(contents: &str) -> Vec<T> 
 where
     T: FromStr,

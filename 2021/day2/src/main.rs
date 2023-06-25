@@ -1,7 +1,7 @@
 use std::str::FromStr;
 use std::fmt::Debug;
 
-use common::read_input;
+use common::{read_input, ParseError};
 
 
 #[derive(Debug)]
@@ -9,6 +9,28 @@ enum Instruction {
     Forward(usize),
     Down(usize),
     Up(usize)
+}
+
+impl FromStr for Instruction {
+    type Err = ParseError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let (instr, val) = s.split_once(' ').unwrap();
+        let instr = match instr {
+            "forward"   => Instruction::Forward,
+            "down"      => Instruction::Down,
+            "up"        => Instruction::Up,
+            _           => panic!("Unknown instruction {instr}")
+        };
+        let val = val.parse().unwrap();
+        Ok(instr(val))
+    }
+}
+
+fn main() {
+    let instructions: Vec<Instruction> = read_input();
+
+    process(&instructions);
+    process2(&instructions);
 }
 
 struct Ship {
@@ -27,10 +49,18 @@ impl Ship {
             Instruction::Down(v) => self.depth += v,
             Instruction::Up(v) => self.depth -= v,
         }
-
     }
 }
 
+
+
+fn process(instructions: &Vec<Instruction>) {
+    let mut ship = Ship::new();
+    for i in instructions {
+        ship.process(&i);
+    }
+    println!("Ship's position: {}", ship.horizontal * ship.depth)
+}
 
 struct Ship2 {
     horizontal: usize,
@@ -54,41 +84,6 @@ impl Ship2 {
         }
 
     }
-}
-
-
-#[derive(Debug)]
-struct InstructionParseError;
-
-impl FromStr for Instruction {
-    type Err = InstructionParseError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (instr, val) = s.split_once(' ').unwrap();
-        let instr = match instr {
-            "forward"   => Instruction::Forward,
-            "down"      => Instruction::Down,
-            "up"        => Instruction::Up,
-            _           => panic!("Unknown instruction {instr}")
-        };
-        let val = val.parse().unwrap();
-        Ok(instr(val))
-    }
-}
-
-
-fn main() {
-    let instructions = read_input();
-
-    process(&instructions);
-    process2(&instructions);
-}
-
-fn process(instructions: &Vec<Instruction>) {
-    let mut ship = Ship::new();
-    for i in instructions {
-        ship.process(&i);
-    }
-    println!("Ship's position: {}", ship.horizontal * ship.depth)
 }
 
 fn process2(instructions: &Vec<Instruction>) {
