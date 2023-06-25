@@ -1,10 +1,7 @@
-use std::fs;
-use std::env;
 use std::str::FromStr;
 use std::fmt::Debug;
-use std::process;
 
-use common::parse_lines;
+use common::read_input;
 
 
 #[derive(Debug)]
@@ -80,13 +77,7 @@ impl FromStr for Instruction {
 
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    if args.len() < 2 {
-        println!("Expected argument with filename: {} <filename>", &args[0]);
-        process::exit(1);
-    }
-    let contents = fs::read_to_string(&args[1]).unwrap();
-    let instructions: Vec<Instruction> = parse_lines(&contents);
+    let instructions = read_input();
 
     process(&instructions);
     process2(&instructions);

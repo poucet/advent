@@ -1,19 +1,11 @@
-use std::fs;
-use std::env;
-use std::process;
 use std::iter::zip;
 
-use common::parse_lines;
+use common::read_input;
 
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    if args.len() < 2 {
-        println!("Expected argument with filename: {} <filename>", &args[0]);
-        process::exit(1);
-    }
-    let contents = fs::read_to_string(&args[1]).unwrap();
-    let numbers = parse_lines(&contents);
+
+    let numbers = read_input();
     count_increases(&numbers);
     count_increases(&sum3(&numbers));
 }  
