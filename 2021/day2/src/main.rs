@@ -1,7 +1,7 @@
 use std::str::FromStr;
 use std::fmt::Debug;
 
-use common::{read_input, ParseError};
+use common::{parse_lines, read_input, ParseError};
 
 
 #[derive(Debug)]
@@ -27,7 +27,7 @@ impl FromStr for Instruction {
 }
 
 fn main() {
-    let instructions: Vec<Instruction> = read_input();
+    let instructions: Vec<Instruction> = parse_lines(&read_input());
 
     process(&instructions);
     process2(&instructions);

@@ -4,8 +4,6 @@ use std::fs;
 use std::env;
 use std::process;
 
-
-
 #[derive(Debug)]
 pub struct ParseError;
 
@@ -21,18 +19,14 @@ where
         .collect()
 }
 
-pub fn read_input<T>() -> Vec<T> 
-where
-    T: FromStr,
-    <T as FromStr>::Err : Debug
-{
+pub fn read_input() -> String {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
         println!("Expected argument with filename: {} <filename>", &args[0]);
         process::exit(1);
     }
     let contents = fs::read_to_string(&args[1]).unwrap();
-    parse_lines(&contents)
+    contents
 }
 
 #[cfg(test)]

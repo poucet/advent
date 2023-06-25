@@ -2,7 +2,7 @@ use std::str::FromStr;
 use std::fmt::Debug;
 use std::ops::Index;
 use bitvec::prelude::*;
-use common::{read_input, ParseError};
+use common::{parse_lines, read_input, ParseError};
 
 #[derive(Debug)]
 struct Binary(BitVec<usize, Msb0>);
@@ -40,7 +40,7 @@ impl Index<usize> for  Binary {
 }
 
 fn main() {
-    let binary: Vec<Binary> = read_input();
+    let binary: Vec<Binary> = parse_lines(&read_input());
     process(binary.iter().collect());
     process2(binary.iter().collect());
 }
@@ -62,7 +62,7 @@ fn process(binary: Vec<&Binary>) {
 fn process2(binary: Vec<&Binary>) {
     let oxygen = find(&binary, 0, |b, msb| b == msb).unwrap();
     let carbon = find(&binary, 0, |b, msb| b != msb).unwrap();
-    println!("Life support: {}", dbg!(oxygen.0.load::<usize>()) * dbg!(carbon.0.load::<usize>()))
+    println!("Life support: {}", oxygen.0.load::<usize>() * carbon.0.load::<usize>())
 }
 
 fn find<'a>(binary: &Vec<&'a Binary>, i: usize, matcher: fn(bool, bool) -> bool) -> Option<&'a Binary> {

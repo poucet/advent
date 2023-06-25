@@ -1,11 +1,11 @@
 use std::iter::zip;
 
-use common::read_input;
+use common::{parse_lines, read_input};
 
 
 fn main() {
 
-    let numbers = read_input();
+    let numbers = parse_lines(&read_input());
     count_increases(&numbers);
     count_increases(&sum3(&numbers));
 }  
