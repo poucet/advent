@@ -1,72 +1,30 @@
-use std::ops::Index;
 use std::collections::HashSet;
 
-pub struct Cave(Vec<Vec<u32>>);
-type Pos = (usize, usize);
+use common::{Grid, Pos};
 
-pub fn parse_input(input: &str) -> Cave {
-  Cave(
-    input
-    .lines()
-    .map(|l| l.chars().map(|c| c.to_digit(10).unwrap()).collect())
-    .collect()
-  )
+type Cave = Grid;
+
+pub fn parse_input(input: &str) -> Cave { 
+  Grid::parse(input)
+}
+pub fn is_low_point(grid: &Grid, r: usize, c: usize) -> bool {
+  grid.neighbors(r, c).into_iter().all(|(x, y) | grid[x][y] > grid[r][c])
 }
 
-impl Cave {
-  
-  pub fn num_rows(&self) -> usize {
-    self.0.len()
-  }
-  
-  pub fn num_columns(&self) -> usize {
-    self[0].len()
-  }
+pub fn flood(grid: &Grid, r: usize, c: usize) -> usize {
+  let mut visited = HashSet::new();
+  let mut stack: Vec<Pos> = vec![(r, c)];
+  while stack.len() > 0 {
+    stack.iter().for_each(|(x, y)| { visited.insert((*x, *y)); });
 
-  pub fn neighbors(&self, r: usize, c: usize) -> Vec<Pos> {
-    let mut nbors = Vec::new();
-    if r > 0 {
-      nbors.push((r - 1, c));
-    }
-    if c > 0 {
-      nbors.push((r, c - 1));
-    }
-    if r < self.num_rows() - 1 {
-      nbors.push((r+1, c));
-    }
-    if c < self.num_columns() - 1 {
-      nbors.push((r, c + 1));
-    }
-    nbors
+    stack = stack
+      .into_iter()
+      .flat_map(|(x, y)| grid.neighbors(x, y))
+      .filter(|(x, y)| grid[*x][*y] < 9)
+      .filter(|(x, y)| !visited.contains(&(*x, *y)))
+      .collect();   
   }
-
-  pub fn is_low_point(&self, r: usize, c: usize) -> bool {
-    self.neighbors(r, c).into_iter().all(|(x, y) | self[x][y] > self[r][c])
-  }
-
-  pub fn flood(&self, r: usize, c: usize) -> usize {
-    let mut visited = HashSet::new();
-    let mut stack: Vec<Pos> = vec![(r, c)];
-    while stack.len() > 0 {
-      stack.iter().for_each(|(x, y)| { visited.insert((*x, *y)); });
-
-      stack = stack
-        .into_iter()
-        .flat_map(|(x, y)| self.neighbors(x, y))
-        .filter(|(x, y)| self[*x][*y] < 9)
-        .filter(|(x, y)| !visited.contains(&(*x, *y)))
-        .collect();   
-    }
-    visited.len()
-  }
-}
-
-impl Index<usize> for Cave {
-  type Output = Vec<u32>;
-
-  fn index(&self, index: usize) -> &Self::Output {
-      &self.0[index]
-  }
+  visited.len()
 }
 
 pub fn low_points(cave: &Cave) -> Vec<(usize, usize)> {
@@ -74,7 +32,7 @@ pub fn low_points(cave: &Cave) -> Vec<(usize, usize)> {
 
   for i in 0..cave.num_rows() {
     for j in 0..cave.num_columns() {
-      if cave.is_low_point(i, j) {
+      if is_low_point(cave, i, j) {
         result.push((i, j))
       }
     }
@@ -89,7 +47,7 @@ pub fn exercise1(cave: &Cave) -> usize {
 pub fn exercise2(cave: &Cave) -> usize {
   let mut basins: Vec<usize>= low_points(cave)
     .into_iter()
-    .map(|(x, y)| cave.flood(x, y))
+    .map(|(x, y)| flood(&cave, x, y))
     .collect();
   basins.sort();
   basins[basins.len() - 3] * basins[basins.len() - 2] * basins[basins.len() - 1]
@@ -126,7 +84,7 @@ mod tests {
   #[test]
   fn it_floods() {
     let cave = parse_input(include_str!("../test.txt"));
-    assert_eq!(3, cave.flood(0, 0));
+    assert_eq!(3, flood(&cave, 0, 0));
   }
 
   #[test]
