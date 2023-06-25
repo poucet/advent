@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use common::{Grid, Pos};
+use common::grid::{Grid, Pos};
 
 type Cave = Grid;
 
