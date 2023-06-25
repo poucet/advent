@@ -7,7 +7,7 @@ use nom::{
 
 use std::ops::{Index, Range, IndexMut};
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Row {
     values: Vec<i64>
 }
@@ -39,7 +39,7 @@ impl IndexMut<usize> for Row {
 }
 
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Board {
     rows: Vec<Row>
 }
@@ -120,22 +120,22 @@ impl Board {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Input {
   pub draws:  Vec<u64>,
   pub boards: Vec<Board>
 }
 
 impl Input {
-  pub fn parse(input: &str) -> IResult<&str, Self> {
-      let (input, draws) = separated_list1(tag(","), u64)(input)?;
-      let (input, _) = line_ending(input)?;
-      let (input, _) = line_ending(input)?;
-      let (input, boards) = separated_list1(multispace1, Board::parse)(input)?;
-      let (input, _) = line_ending(input)?;
-      Ok((input, Input { draws, boards }))
-  }   
-}
+    pub fn parse(input: &str) -> IResult<&str, Self> {
+        let (input, draws) = separated_list1(tag(","), u64)(input)?;
+        let (input, _) = line_ending(input)?;
+        let (input, _) = line_ending(input)?;
+        let (input, boards) = separated_list1(multispace1, Board::parse)(input)?;
+        let (input, _) = line_ending(input)?;
+        Ok((input, Input { draws, boards }))
+    }   
+    }
 
 #[cfg(test)]
 mod tests {

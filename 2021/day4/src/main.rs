@@ -1,14 +1,11 @@
 use common::read_input;
-use day4::{Board, Input};
+use day4::Input;
 
 fn main() {
-    let contents = read_input() + "\n\n";
+    let contents = read_input();
     let input = Input::parse(&contents).unwrap().1;
-    if false {
-        println!("Score: {}", process(input));
-    } else {
-        println!("Score: {}", process2(input));
-    }
+    println!("Score: {}", process(input.clone()));
+    println!("Score: {}", process2(input));
 }
 
 fn process(mut input: Input) -> u64 {
@@ -30,7 +27,7 @@ fn process2(mut input: Input) -> u64 {
             b.mark(n);
         }
         if input.boards.len() == 1 && input.boards[0].is_complete() {
-            return dbg!(n) * input.boards[0].score();
+            return n * input.boards[0].score();
         }   
     }
     0
