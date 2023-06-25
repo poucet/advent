@@ -1,5 +1,7 @@
-use std::ops::Index;
+use std::ops::{Index, IndexMut};
+use std::fmt::Debug;
 
+#[derive(Debug, Clone)]
 pub struct Grid(Vec<Vec<u32>>);
 pub type Pos = (usize, usize);
 
@@ -76,6 +78,12 @@ impl Index<usize> for Grid {
 
   fn index(&self, index: usize) -> &Self::Output {
       &self.0[index]
+  }
+}
+
+impl IndexMut<usize> for Grid {
+  fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+      &mut self.0[index]
   }
 }
   
