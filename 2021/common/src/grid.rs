@@ -2,7 +2,7 @@ use std::ops::{Index, IndexMut};
 use std::fmt::Debug;
 
 #[derive(Debug, Clone)]
-pub struct Grid(Vec<Vec<u32>>);
+pub struct Grid(Vec<Vec<usize>>);
 pub type Pos = (usize, usize);
 
 impl From<&str> for Grid {
@@ -10,22 +10,19 @@ impl From<&str> for Grid {
     Grid(
       input
       .lines()
-      .map(|l| l.chars().map(|c| c.to_digit(10).unwrap()).collect())
+      .map(|l| l.chars().map(|c| c.to_digit(10).unwrap() as usize).collect())
       .collect()
     )
   }
 }
 
 impl Grid {
-  pub fn num_rows(&self) -> usize {
-    self.0.len()
-  }
-  
-  pub fn num_columns(&self) -> usize {
-    self[0].len()
+  pub fn len(&self) -> (usize, usize) {
+    (self.0.len(), self.0[0].len())
   }
 
-  pub fn neighbors(&self, r: usize, c: usize) -> Vec<Pos> {
+  pub fn neighbors(&self, (r, c): Pos) -> Vec<Pos> {
+    let (nr, nc) = self.len();
     let mut nbors = Vec::new();
     if r > 0 {
       nbors.push((r - 1, c));
@@ -33,10 +30,10 @@ impl Grid {
     if c > 0 {
       nbors.push((r, c - 1));
     }
-    if c < self.num_columns() - 1 {
+    if c < nc - 1 {
       nbors.push((r, c + 1));
     }
-    if r < self.num_rows() - 1 {
+    if r < nr - 1 {
       nbors.push((r+1, c));
     }
 
@@ -44,7 +41,8 @@ impl Grid {
   }
 
   // Includes diagonal neighbors.
-  pub fn all_neighbors(&self, r: usize, c: usize) -> Vec<Pos> {
+  pub fn all_neighbors(&self, (r, c): Pos) -> Vec<Pos> {
+    let (nr, nc) = self.len();
     let mut nbors = Vec::new();
     if r > 0 && c > 0{
       nbors.push((r - 1, c - 1));
@@ -52,41 +50,41 @@ impl Grid {
     if r > 0 {
       nbors.push((r - 1, c));
     }
-    if r > 0 && c < self.num_columns() - 1 {
+    if r > 0 && c < nc - 1 {
       nbors.push((r - 1, c + 1));
     }
     if c > 0 {
       nbors.push((r, c - 1));
     }
-    if c < self.num_columns() - 1 {
+    if c < nc - 1 {
       nbors.push((r, c + 1));
     }
-    if r < self.num_rows() - 1 && c > 0{
+    if r < nr - 1 && c > 0{
       nbors.push((r + 1, c - 1));
     }
 
-    if r < self.num_rows() - 1 {
+    if r < nr - 1 {
       nbors.push((r + 1, c));
     }
 
-    if r < self.num_rows() - 1 && c < self.num_columns() - 1 {
+    if r < nr - 1 && c < nc - 1 {
       nbors.push((r + 1, c + 1));
     }
     nbors
   }
 }
+  
+impl Index<(usize, usize)> for Grid {
+  type Output = usize;
 
-impl Index<usize> for Grid {
-  type Output = Vec<u32>;
-
-  fn index(&self, index: usize) -> &Self::Output {
-      &self.0[index]
+  fn index(&self, (r, c): (usize, usize)) -> &Self::Output {
+      &self.0[r][c]
   }
 }
 
-impl IndexMut<usize> for Grid {
-  fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-      &mut self.0[index]
+impl IndexMut<(usize, usize)> for Grid {
+  fn index_mut(&mut self, (r, c): (usize, usize)) -> &mut Self::Output {
+      &mut self.0[r][c]
   }
 }
   
@@ -111,11 +109,11 @@ mod tests {
     let g = Grid::from("123\n456\n789");
     assert_eq!(
       vec![(0, 1), (1, 0)],
-       g.neighbors(0, 0)
+       g.neighbors((0, 0))
     );
     assert_eq!(
       vec![(0, 1), (1, 0), (1, 1)],
-       g.all_neighbors(0, 0)
+       g.all_neighbors((0, 0))
     );
 
   }

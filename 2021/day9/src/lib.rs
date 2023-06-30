@@ -5,7 +5,7 @@ use common::grid::{Grid, Pos};
 type Cave = Grid;
 
 pub fn is_low_point(grid: &Grid, r: usize, c: usize) -> bool {
-  grid.neighbors(r, c).into_iter().all(|(x, y) | grid[x][y] > grid[r][c])
+  grid.neighbors((r, c)).into_iter().all(|(x, y) | grid[(x, y)] > grid[(r, c)])
 }
 
 pub fn flood(grid: &Grid, r: usize, c: usize) -> usize {
@@ -16,8 +16,8 @@ pub fn flood(grid: &Grid, r: usize, c: usize) -> usize {
 
     stack = stack
       .into_iter()
-      .flat_map(|(x, y)| grid.neighbors(x, y))
-      .filter(|(x, y)| grid[*x][*y] < 9)
+      .flat_map(|(x, y)| grid.neighbors((x, y)))
+      .filter(|(x, y)| grid[(*x, *y)] < 9)
       .filter(|(x, y)| !visited.contains(&(*x, *y)))
       .collect();   
   }
@@ -26,9 +26,9 @@ pub fn flood(grid: &Grid, r: usize, c: usize) -> usize {
 
 pub fn low_points(cave: &Cave) -> Vec<(usize, usize)> {
   let mut result = Vec::new();
-
-  for i in 0..cave.num_rows() {
-    for j in 0..cave.num_columns() {
+  let (nr, nc) = cave.len();
+  for i in 0..nr {
+    for j in 0..nc {
       if is_low_point(cave, i, j) {
         result.push((i, j))
       }
@@ -38,7 +38,7 @@ pub fn low_points(cave: &Cave) -> Vec<(usize, usize)> {
 }
 
 pub fn exercise1(cave: &Cave) -> usize {
-  low_points(cave).into_iter().map(|(x,y)| cave[x][y] + 1).sum::<u32>() as usize
+  low_points(cave).into_iter().map(|(x,y)| cave[(x, y)] + 1).sum::<usize>() as usize
 }
 
 pub fn exercise2(cave: &Cave) -> usize {
@@ -57,13 +57,8 @@ mod tests {
   #[test]
   fn it_parses() {
     let cave = Grid::from(include_str!("../test.txt"));
-    assert_eq!(
-      cave[0],
-      vec![2, 1, 9, 9, 9, 4, 3, 2 , 1, 0]
-    );
 
-    assert_eq!(5, cave.num_rows());
-    assert_eq!(10, cave.num_columns());
+    assert_eq!((5, 10), cave.len());
   }
 
   #[test]

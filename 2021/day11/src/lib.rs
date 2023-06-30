@@ -8,11 +8,11 @@ type Cave = Grid;
 
 fn animate((mut cave, f): (Cave, usize)) -> (Cave, usize) {
   let mut roots= HashSet::new();
-
-  for r in 0..cave.num_rows() {
-    for c in 0..cave.num_columns() {
-      cave[r][c] += 1;
-      if cave[r][c] > 9 {
+  let (nr, nc) = cave.len();
+  for r in 0..nr {
+    for c in 0..nc {
+      cave[(r, c)] += 1;
+      if cave[(r, c)] > 9 {
         roots.insert((r, c));
       }
     }
@@ -24,10 +24,10 @@ fn animate((mut cave, f): (Cave, usize)) -> (Cave, usize) {
     let mut new_roots = HashSet::new();
 
     for (r, c) in roots.into_iter() {
-      for (r1, c1) in cave.all_neighbors(r, c) {
+      for (r1, c1) in cave.all_neighbors((r, c)) {
         if !flashed.contains(&(r1, c1)) {
-          cave[r1][c1] += 1;
-          if cave[r1][c1] > 9 {
+          cave[(r1, c1)] += 1;
+          if cave[(r1, c1)] > 9 {
             new_roots.insert((r1, c1));
           }
         }
@@ -37,7 +37,7 @@ fn animate((mut cave, f): (Cave, usize)) -> (Cave, usize) {
   }
 
   for (r, c) in flashed.iter() {
-    cave[*r][*c] = 0;
+    cave[(*r, *c)] = 0;
   }
 
   (cave, f + flashed.len())
@@ -58,7 +58,8 @@ pub fn exercise1(cave: &Cave) -> usize {
 pub fn exercise2(cave: &Cave) -> usize {
   let mut cave = cave.clone();
   let mut step = 0;
-  let required = cave.num_rows() * cave.num_columns();
+  let (nr, nc) = cave.len();
+  let required = nr * nc;
   loop {
     let (t_cave, f) = animate((cave, 0));
     step += 1;
@@ -77,13 +78,8 @@ mod tests {
   #[test]
   fn it_parses() {
     let cave = Grid::from(include_str!("../test.txt"));
-    assert_eq!(
-      cave[0],
-      vec![5, 4, 8, 3, 1, 4, 3, 2, 2, 3]
-    );
 
-    assert_eq!(10, cave.num_rows());
-    assert_eq!(10, cave.num_columns());
+    assert_eq!((10, 10), cave.len());
   }
 
   #[test]
