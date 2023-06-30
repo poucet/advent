@@ -5,9 +5,6 @@ use common::grid::{Grid};
 
 type Cave = Grid;
 
-pub fn parse_input(input: &str) -> Cave { 
-  Grid::parse(input)
-}
 
 fn animate((mut cave, f): (Cave, usize)) -> (Cave, usize) {
   let mut roots= HashSet::new();
@@ -79,7 +76,7 @@ mod tests {
 
   #[test]
   fn it_parses() {
-    let cave = parse_input(include_str!("../test.txt"));
+    let cave = Grid::from(include_str!("../test.txt"));
     assert_eq!(
       cave[0],
       vec![5, 4, 8, 3, 1, 4, 3, 2, 2, 3]
@@ -91,20 +88,20 @@ mod tests {
 
   #[test]
   fn it_flashes() {
-    let cave = parse_input(include_str!("../test.txt"));
+    let cave = Grid::from(include_str!("../test.txt"));
     assert_eq!(204, flashes(cave, 10));
   }
 
 
   #[test]
   fn it_passes_exercise1() {
-    let cave = parse_input(include_str!("../test.txt"));
+    let cave = Grid::from(include_str!("../test.txt"));
     assert_eq!(1656, exercise1(&cave))
   }
 
   #[test]
   fn it_passes_exercise2() {
-    let cave = parse_input(include_str!("../test.txt"));
+    let cave = Grid::from(include_str!("../test.txt"));
     assert_eq!(195, exercise2(&cave))
   }
 

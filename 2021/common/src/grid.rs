@@ -5,8 +5,8 @@ use std::fmt::Debug;
 pub struct Grid(Vec<Vec<u32>>);
 pub type Pos = (usize, usize);
 
-impl Grid {
-  pub fn parse(input: &str) -> Self {
+impl From<&str> for Grid {
+  fn from(input: &str) -> Self { 
     Grid(
       input
       .lines()
@@ -14,6 +14,9 @@ impl Grid {
       .collect()
     )
   }
+}
+
+impl Grid {
   pub fn num_rows(&self) -> usize {
     self.0.len()
   }
@@ -99,13 +102,13 @@ mod tests {
         vec![4, 5, 6],
         vec![7, 8, 9],
       ],
-      Grid::parse("123\n456\n789").0
+      Grid::from("123\n456\n789").0
     )
   }
 
   #[test]
   fn it_neighbors() {
-    let g = Grid::parse("123\n456\n789");
+    let g = Grid::from("123\n456\n789");
     assert_eq!(
       vec![(0, 1), (1, 0)],
        g.neighbors(0, 0)
