@@ -17,6 +17,14 @@ impl From<&str> for Grid {
 }
 
 impl Grid {
+  pub fn new((nr, nc): &Pos, default_value: usize) -> Self {
+    let mut vec: Vec<_> = Vec::new();
+    for r in 0..*nr {
+      vec.push(vec![default_value; *nc]);
+    }
+    Grid(vec)
+  }
+  
   pub fn len(&self) -> (usize, usize) {
     (self.0.len(), self.0[0].len())
   }
