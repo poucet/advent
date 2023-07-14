@@ -1,1 +1,1 @@
-../../common/AStar.hs
+../common/AStar.hs

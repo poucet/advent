@@ -1,1 +1,1 @@
-../../common/PQueue.hs
+../common/PQueue.hs
