@@ -5,3 +5,4 @@
 **/*.o
 **/Main
 **/target/
+**/Cargo.lock
