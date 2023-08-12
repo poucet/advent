@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 use common::read_input;
 use day23::{exercise1, exercise2};
 
